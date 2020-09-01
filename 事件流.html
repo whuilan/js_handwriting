@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+  <input type="button" id="btn" value="Click me"/>
+</body>
+<script>
+let btn = document.getElementById("btn");
+btn.onclick = function(){
+  alert(event.currentTarget);
+  event.stopPropagation();
+}
+document.body.onclick = function(){
+  alert(event.currentTarget)
+}
+</script> 
+</html>

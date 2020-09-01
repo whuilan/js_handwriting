@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>日期格式化-百度春招二面</title>
+</head>
+<body>
+</body>
+<script>
+    // 获取当前时间并并格式化化为‘yyyy-MM-dd’格式
+    function getNowFormatDate(){
+        debugger;
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        if(month >= 1 && month <= 9){
+            month = "0" + month;
+        }
+        if(day >= 0 && day <= 9){
+            day = "0" + day;
+        }
+        let formatDate = year + '-' + month + '-' + day
+        return formatDate;
+    }
+    // const date = getNowFormatDate()
+    // console.log(date)
+
+    // 可以传入时间格式的通用格式化时间函数
+    function getFormatDate(format, date){
+        debugger;
+        let items = {
+            'y+' : date.getFullYear(),
+            'M+' : date.getMonth() + 1,
+            'd+' : date.getDate(),
+            'h+' : date.getHours(),
+            'm+' : date.getMinutes(),
+            's+' : date.getSeconds()
+        }
+        for(let key in items){
+            if(new RegExp(`(${key})`).test(format)){ // 加()是为了创建捕获组以使用RegExp.$1
+                let strVal = items[key] + '';
+                // RegExp.$1指的是与正则表达式匹配的第一个子匹配(以括号为标志)字符串，注意replace
+                // 返回替换后的数组，但不改变原数组，因此要重新赋给format
+                format = format.replace(RegExp.$1, (RegExp.$1.length === 1) ? strVal : 
+                        strVal.padStart(RegExp.$1.length, '0'))
+            }
+        }
+        return format;
+    }
+    const date = new Date();
+    const newDate = getFormatDate('yyyy-MM-dd hh:mm:ss', date);
+    console.log(newDate)
+</script>
+</html>

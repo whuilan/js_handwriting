@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 实现一个栈类 Stack，要求支持压入、弹出、查找栈顶、清空栈操作
+    // 考试的时候写成了java风格的。。。格式都错了。。
+    // js的写法！
+    class Stack{
+      constructor(){
+        this.items = [];
+      }
+      push(item){
+        this.items.unshift(item);
+      }
+      pop(){
+        return this.items.shift()
+      }
+      top(){
+        return this.items[0];
+      }
+      isEmpty() {
+      return this.items.length === 0;
+      };
+
+      clear() {
+       // return this.items = []; 这个方法不好！
+       this.items.length = 0; // 或者this.items.splice(0, this.item.length)
+      };
+
+      size() {
+        return this.items.length;
+      }
+    }
+    debugger;
+    let stack = new Stack();
+    stack.push(2);
+    let i = stack.pop()
+    console.log(i);
+
+    // 队列：
+  class Queue{
+    constructor(){
+      this.items = []
+    }
+    enqueue(item){
+      this.items.push(item)
+    }
+    dequeue(){
+      return this.items.shift()
+    }
+    isEmpty(){
+      return this.items.length === 0
+    }
+    size(){
+      return this.items.length
+    }
+}
+  </script>
+</html>

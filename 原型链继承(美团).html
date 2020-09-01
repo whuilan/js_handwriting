@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>testInherit</title>
+</head>
+<body>
+</body>
+<script>
+function SuperType() {
+    this.property = true;
+}
+
+SuperType.prototype.getSuperValue = function() {
+    return this.property;
+};
+
+function SubType() {
+    this.subproperty = false;
+}
+
+SubType.prototype = new SuperType();
+SubType.prototype.getSubValue = function() {
+    return this.subproperty;
+};
+
+var instance = new SubType();
+
+ //问1: 下列console输出结果
+console.log(instance.getSuperValue());  // true
+console.log(instance instanceof Object);  // true
+console.log(instance instanceof SuperType); // true
+console.log(instance instanceof SubType); // true
+//问2: instance.constructor 指向哪里
+console.log(instance.constructor)
+//问3: 调用 instance.toString()，原型链的搜索过
+</script>
+</html>

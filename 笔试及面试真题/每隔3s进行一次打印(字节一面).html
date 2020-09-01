@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 实现一个repeat方法 function repeat (func, times, wait) {}，使下面调用代码能正常工作：
+    // const repeatFunc = repeat(console.log, 4, 3000);
+    // repeatFunc("hellworld"); //会输出4次 helloworld, 每次间隔3秒
+
+    // 面试时用的setTimeout
+    // for(let i = 1; i <= 3; i++){
+    //   setTimeout(console.log(`第${i}次setTimeout`))
+    // }
+    // 会同时打印3次！
+
+    // 先试一下普通的setInterval怎么用
+    setInterval(()=>{
+      console.log('我是setInterval')
+    }, 3000) // 每隔3秒打印一次
+
+    // 计数版本
+    function repeat(fn, times, wait){
+      return function(text){
+        let i = 0;
+        let id = setInterval(() => {
+          fn(text);
+          i++;
+          if(i == times){
+            clearInterval(id);
+          }
+        }, wait)
+      }
+    }
+
+    let repeatFunc = repeat((text) => console.log(text), 4, 3000)
+    repeatFunc('Hello world')
+  </script>
+</html>

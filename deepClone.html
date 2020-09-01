@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>testNew</title>
+</head>
+<body>
+</body>
+<script>
+function deepClone(obj){
+    // 如果obj是数组，就创建数组，是普通键值对形式的对象就创建对象
+    debugger
+    let objClone = Array.isArray(obj) ? [] : {};
+    // obj非空且为ojbect类型
+    if(obj && typeof obj === 'object'){
+        // 对每个属性及属性值进行拷贝
+        for(let key in obj){
+            // 判断key是否是obj本身具有的属性（因为还有可能是其原型上的属性）
+            if(obj.hasOwnProperty(key)){
+                // 如果要复制的属性值又是一个复杂/引用类型，则继续递归
+                if(obj[key] && typeof obj[key] === 'object'){
+                    objClone[key] = deepClone(obj[key])
+                }else{ // 基本类型直接复制
+                    objClone[key] = obj[key]
+                }
+            }
+        }
+    }
+    return objClone;
+}
+function Person(name, age){
+  this.name = name;
+  this.age = [1, 2];
+}
+let boy1 = new Person('Jack', 25)
+// console.log(boy1.name);   
+// console.log(boy1.age); 
+let boy2 = deepClone(boy1)
+// console.log(boy2.name); 
+// console.log(boy2.age)
+let boy3 = boy1
+// console.log(boy3.name);   
+// console.log(boy3.age); 
+
+boy1.name = 'Bob';
+boy1.age.push(3);
+console.log(boy1.name);   
+console.log(boy1.age);
+console.log(boy2.name);
+console.log(boy2.age)
+console.log(boy3.name);   
+console.log(boy3.age); 
+</script>
+</html>

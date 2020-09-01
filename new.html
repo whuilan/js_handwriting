@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>testNew</title>
+</head>
+<body>
+</body>
+<script>
+function Person(name, age){
+  this.name = name;
+  this.age = age; 
+  this.sex = 'male';
+  this.colors = ['black', 'white']
+}
+Person.prototype.isHandsome = true;
+Person.prototype.hobbies = ['reading', 'singing']
+Person.prototype.sayHello = function(){
+  console.log(`Hello, my name is ${this.name}`)
+}
+
+let student = {
+  add : function(name, id){
+    this.name = name;
+    this.id = id;
+  }
+}
+student.add('whl', 1)
+console.log(student) // {name: "whl", id: 1, add: ƒ}，可见执行student.add()就相当于给student添加属性
+
+function newObject(){
+  // debugger
+  // 创建一个新的空对象
+  let obj = {}; 
+  // 取出第一个参数，就是我们要传入的构造函数。
+  let [constructor, ...args] = [...arguments];
+  // 执行原型链接，将obj的原型指向构造函数的prototype属性值
+  obj.__proto__ = constructor.prototype;
+  // 执行构造函数，并使用call/apply改变this指向，将
+  // 构造函数的属性和方法添加到新创建的空对象中
+  let result = constructor.call(obj, ...args);
+  if(result && (typeof (result) == 'object' || typeof (result) == 'function')){
+    // 如果构造函数的执行结果返回的是一个对象，那么返回这个对象
+    return result;
+  }
+  // 如果构造函数返回的不是一个对象，那么返回我们创建的新对象
+  return obj;
+}
+
+// debugger
+// let handsomeBoy1 = new Person('Cha1', 24);
+// let handsomeBoy1 = newObject(Person, 'Hua Hua', 24);
+// console.log(handsomeBoy1.name); // Cha1
+// handsomeBoy1.sex = 'female';
+// console.log(handsomeBoy1.sex); // female
+// handsomeBoy1.colors.push('gray')
+// console.log(handsomeBoy1.colors) // ["black", "white", "gray"]
+// handsomeBoy1.isHandsome = false;
+// console.log(handsomeBoy1.isHandsome) // false
+// handsomeBoy1.hobbies.push('drawing')
+// console.log(handsomeBoy1.hobbies);  // ['reading', 'singing', 'drawing']
+// handsomeBoy1.sayHello();
+
+// let handsomeBoy2 = newObject(Person, 'Cha2', 25)
+// let handsomeBoy2 = new Person('Cha2', 25)
+// console.log(handsomeBoy2.name); // Cha2
+// console.log(handsomeBoy2.sex); // male
+// console.log(handsomeBoy2.colors) // ['black', 'white']
+// console.log(handsomeBoy2.isHandsome); // true 可见实例并不能修改原型上的属性
+// console.log(handsomeBoy2.hobbies) //  ['reading', 'singing', 'drawing'] 
+// 但是当原型属性为引用类型时，可以修改引用指向的值
+// 因为并没有改变引用（地址）本身，所以实例属性相当于深拷贝，原型属性相当于浅拷贝
+// handsomeBoy2.sayHello()  
+// for(let key in handsomeBoy){
+//   console.log(key);
+// }
+
+</script>
+</html>

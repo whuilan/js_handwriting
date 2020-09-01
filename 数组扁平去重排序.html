@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>数组扁平去重排序</title>
+</head>
+<body>
+</body>
+<script>
+    // 扁平化
+    function fn(arr){
+        // debugger;
+        let res = []
+        for(let i = 0;i < arr.length; i++){
+            if(Array.isArray(arr[i])){
+                res = res.concat(fn(arr[i]))
+            }else{
+                res.push(arr[i])
+            }
+        }
+        return res;
+    }
+    var array = [3, 4, [2, 2, 4], 3, 11]
+    var newArr = [...new Set(fn(array))].sort((a,b)=>a-b);
+    // console.log(newArr)
+
+    // 数组去重方法（另见面试真题含有对象时的去重方法！）
+    // 法一：利用es6新增的Set（类似于数组，但没有重复元素），可以接受（类）数组作为参数
+    let arr = [1,2,2,2,4,3]
+    let arr2 = [3, 'hello', {name:'jack'}, {name: 'jack'}]
+    function uniq1(arr){
+        return [...new Set(arr)]
+    }
+    console.log(uniq1(arr2)) 
+
+    // 法二：利用includes
+    function uniq2(arr){
+        let res = [];
+        for(let i = 0; i < arr.length; i++){
+            if(!res.includes(arr[i])){
+                res.push(arr[i]);
+            }
+        }
+        return res;
+    }
+    console.log(uniq2(arr2))
+
+    // 法三：利用Map
+    function uniq3(arr){
+        let map = new Map();
+        let res = [];
+        for(let i = 0; i < arr.length; i++){
+            if(map.has(arr[i])){ // 不含这个key
+                map.set(arr[i], true); // 标志不重复
+            }
+            else{
+                map.set(arr[i], false); // 标志重复
+                res.push(arr[i]);
+            }
+        }
+        return res;
+    }
+    console.log(uniq3(arr2))
+</script>
+</html>

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // pat1和pat2等价！可以使用字面量定义的任何正则表达式，
+    // 都可以使用构造函数来定义！记住了！
+    let pat1 = /[bc]at/i;
+    let pat2 = new RegExp("[bc]at", "i"); // 两个参数都是字符串！
+    let str = "Bat";
+    // console.log(pat1.test(str));
+    // console.log(pat2.test(str));
+
+    // 匹配'.at'
+    pat1 = /\.at/;
+    pat2 = new RegExp("\\.at");
+    // 匹配一位或两位小数
+    pat1 = /\d.\d{1,2}/;
+    pat2 = new RegExp("\\d.\\d{1,2}");
+    console.log(pat1.test("1ds"))
+  </script>
+</html>

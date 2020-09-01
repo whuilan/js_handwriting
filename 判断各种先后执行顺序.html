@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+</body>
+<script>
+// 字节提前批一面
+// 实现一个repeat方法 function repeat (func, times, wait) {}，使下面调用代码能正常工作：
+// const repeatFunc = repeat(console.log, 4, 3000);
+// repeatFunc("hellworld"); //会输出4次 helloworld, 每次间隔3秒
+function repeat(func, times, wait){
+  return function(text){
+    for(let i = 0; i < times; i++){
+      setInterval(func(text), 3000)
+    }
+  }
+}
+const repeatFunc = repeat(console.log, 3, 8000);
+repeatFunc("helloworld");
+
+// 下面这种写法5秒之后，同时打印出0 1 2
+for(let i = 0; i < 3; i++){
+  setTimeout(function(){
+    console.log(i)
+  }, 5000)
+}
+</script>
+</html>

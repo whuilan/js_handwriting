@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>testThis</title>
+</head>
+<body>
+</body>
+<script>
+// 箭头函数使用call/apply绑定
+var name = 'outer';
+let person = {
+        name:'king',
+        greet:function(str = 'hello', str2 = 'Good morning'){
+                console.log(`${str},${this.name},${str2}`)
+        },
+        show1:function(){  // 普通函数
+          return this.name;
+        },
+        show2:()=>{return this.name}, // 箭头函数
+        show3:function(){
+          return ()=>{return this.name}
+        },
+        show4: () => {() => {
+          return this.name;
+        }}
+}
+let person2 = {name:'sara'}
+
+console.log(person.show1()); // king
+console.log(person.show2()); // outer
+console.log(person.show3()()); // king
+console.log(person.show4()); // undefined
+
+console.log(person.show1.call(person2)); // sara
+console.log(person.show2.call(person2)); // outer
+console.log(person.show3.call(person2)()) // sara
+// 可以看出，对箭头函数直接使用call/apply绑定是无法将this的指向改为指定的对象的，因为箭头函数
+// 和普通函数不一样，压根儿就没有自己的指向，它永远是从包含它的代码块的外部对象(即外部作用域)继承
+
+id = 1
+class Bork {
+    constructor(id){
+      this.id = 2
+    }
+    //Property initializer syntax
+    instanceProperty = "bork";
+    boundFunction = () => {
+      return this.instanceProperty;
+    }
+    showId = () => {
+      return this.id
+    }
+    // showId2 : () => {
+    //   return 33;
+    // } 不能这样定义，这样定义会报错！
+  }
+  let myBork = new Bork(2);
+
+  //Property initializers are not on the prototype.
+  // console.log(myBork.__proto__.boundFunction); // > undefined
+  // console.log(myBork.boundFunction()) // > bork 
+  //Bound functions are bound to the class instance.
+  //console.log(myBork.boundFunction.call(undefined)); // > "bork"
+  // !!!重要！这叫class field语法！
+  //console.log(myBork.showId()) // > 2
+
+// foo = "bar";
+// function testThis(){
+//   this.foo = 'foo';
+// }
+// console.log(this.foo); // bar
+// new testThis();
+// console.log(this.foo); // bar
+// console.log(new testThis().foo) // foo
+
+// function dialogue () {
+//   console.log (`I am ${this.heroName}`);
+// }
+// const hero = {
+//   heroName: 'Batman',
+// };
+// dialogue() // I am undefined
+// dialogue.call(hero)//I am Batman
+</script>
+</html>

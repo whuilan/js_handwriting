@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<head>
+<meta charset="utf-8 ">
+<title>conentEditalbe属性示例</title>
+</head>
+<h2>可编辑列表</h2>
+<ul contentEditable="true">
+<li>列表元素1</li>
+<li>列表元素2</li>
+<li>列表元素3</li>
+</ul>
+<script>
+// 获取页面TagName种类
+// 法一：
+var dom = document.querySelectorAll("*"); //取出所有的标签
+var str  = [];                            //建立一个数组装最后的标签
+for(var i=0,len=dom.length; i<len;i++){
+    //去重
+  if(!str.includes(dom[i].nodeName)){
+    str.push(dom[i].nodeName);
+   }
+}
+// for(let i = 0; i < str.length;i++){
+//   console.log(str[i])
+// }
+
+// 法二：
+// const s = new Set([...document.getElementsByTagName('*')].map(node=>node.tagName))
+const s = new Set(Array.from(document.querySelectorAll("*")).map(node=>node.tagName))
+console.log(s)
+console.log("ll")
+</script>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>七牛云春招一面</title>
+</head>
+<body>
+</body>
+<script>
+String.prototype.replaceAll = function(obj){
+    // 第一步，获取调用replaceAll方法的字符串
+    let str = this;
+    // console.log(str)
+    // 针对每个key，将str中与之匹配的部分替换为key对应的value
+    for(let key in obj){
+        // console.log(key)
+        str = str.replace(new RegExp(key, 'g'), obj[key])
+    }
+    return str;
+}
+console.log("abcdca".replaceAll({ a: "1", c: "3"}))
+</script>
+</html>

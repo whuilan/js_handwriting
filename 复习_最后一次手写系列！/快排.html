@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    function sort(a){
+      sort(a, 0, a.length - 1);
+    }
+
+    function sort(a, lo, hi){
+      // 这个居然搞忘了！
+      if(hi <= lo){
+        return;
+      }
+      let j = partition(a, lo, hi);
+      sort(a, lo, j - 1);
+      sort(a, j+1, hi);
+    }
+
+    function partition(a, lo, hi){
+      let i = lo, j = hi + 1;
+      let v = a[lo];
+      while(true){
+        while(a[++i] < v){
+          if(i == hi){
+            break;
+          }
+        }
+        while(v < a[--j]){}
+        if(i >= j){
+          break;
+        }
+        swap(a, i, j);
+      }
+      swap(a, lo, j);
+      return j;
+    }
+
+    function swap(a, i, j){
+      let temp = a[i];
+      a[i] = a[j];
+      a[j] = temp;
+    }
+  </script>
+</html>

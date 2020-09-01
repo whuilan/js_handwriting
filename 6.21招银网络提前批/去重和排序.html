@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+</body>
+<script>
+  // 随机生成1-20内10个数，放俩数组，再给数字合并去重排序（要求用前端的方法）
+  // 老题了，上一级目类里就有呀！在这儿重新做一边吧！先复习扁平、去重、排序
+
+  // 去重
+  // 法一，利用ES6新增的数据结构Set，Set类似于数组，但不含重复元素，可以接受（类）数组作为参数
+  function uniq1(arr){         // [1,2,3,3,2]
+    return [...new Set(arr)]  // [1,2,3]
+  }
+  // 考试的时候写错了，直接返回了new Set(arr)，Set是新增的数据结构，
+  // 类似于数组但不是数组啊！要用扩展运算符展开成数组的
+
+  // 法二，利用arr.includes()或arr.indexOf()
+  function uniq2(arr){
+    const res = [];
+    for(let i = 0; i < arr.length; i++){ 
+      if(!res.includes(arr[i])){ // 或res.indexOf(arr[i])===-1
+        res.push(arr[i])
+      }
+    }
+    return res;
+  }
+
+  // JS生成[min,max]范围内的随机数的方法：
+  // Math.round(Math.random() * (max - min)) + min; 
+  // Math.floor(Math.random()*(max-min+1) + min)
+  // js只有一个Math.random() 函数返回一个浮点数, 伪随机数在范围[0，1)。
+
+  const arr1 = [];
+  const arr2 = [];
+  for(let i = 0; i < 10; i++){
+    arr1.push(Math.round(Math.random()*(20-1)) + 1);
+    arr2.push(Math.round(Math.random()*(20-1)) + 1);
+  }
+  console.log(arr1) 
+  console.log(arr2) 
+  const arr = arr1.concat(arr2)
+  const res = [...new Set(arr)]
+  // 使用sort方法要指定排序规则！
+  res.sort((n1, n2)=>(n1-n2))
+  console.log(res)
+</script>
+</html>

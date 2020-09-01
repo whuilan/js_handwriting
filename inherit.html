@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>testInherit</title>
+</head>
+<body>
+</body>
+<script>
+// 4 原型式继承
+function inheritObj(obj){
+  // 声明一个临时性的过渡构造函数
+  function F(){};
+  // 将传入的对象作为这个构造函数的原型
+  F.prototype = obj;
+  // 返回临时类型的一个新实例
+  return new F();
+}
+// 6 寄生组合式继承
+function inheritPrototype(SuperType, SubType){
+  // 第一步，创建父类原型的一个副本
+  let p = inheritObj(SuperType.prototype)
+  // 第二步，增强对象，修正因为重写子类的原型导致子类的constructor属性被修改
+  p.constructor = SubType;
+  // 第三步，设置子类原型
+  SubType.prototype = p;
+}
+function SuperType(name){
+  this.name = name;
+  this.colors = ['red', 'blue']
+}
+SuperType.prototype.showName = function(){
+  console.log(`Hello, my name is ${this.name}`)
+}
+function SubType(name, age){
+  SuperType.call(this, name)
+  this.age = age
+}
+inheritPrototype(SuperType, SubType)
+subInstance1 = new SubType('Bob', 24);
+subInstance2 = new SubType('Jack', 25)
+console.log(subInstance1.name);
+subInstance1.colors.push('yellow')
+console.log(subInstance1.colors)
+console.log(subInstance2.name)
+console.log(subInstance2.colors)
+subInstance1.showName();
+subInstance2.showName();
+
+// 5 寄生式继承
+function inheritAgain(obj){
+  // 通过原型式继承方法创建新的对象
+  let o = inheritObj(obj); 
+  // 以某种方式增强这个对象
+  o.sayHi = function(){
+    console.log("Hi")
+  }
+  return o;
+}
+// var person = {
+//   name : 'Mary',
+//   hobbies : ['dancing', 'rading']
+// }
+// var per = inheritAgain(person);
+// per.sayHi();
+
+// var person1 = inheritObj(person);
+// console.log(person1.name)
+// person1.hobbies.push('soccer')
+// console.log(person1.hobbies)
+// var person2 = inheritObj(person)
+// console.log(person2.name)
+// console.log(person2.hobbies)
+// person2.name = 'Tom'
+// console.log(person2.name)
+// console.log(person1.name)
+
+
+// 3 组合式继承（原型链+构造函数）
+// SubType.prototype = new SuperType();
+// subInstance1 = new SubType('Bob', 24);
+// subInstance2 = new SubType('Jack', 25)
+// console.log(subInstance1.name);
+// subInstance1.colors.push('yellow')
+// console.log(subInstance1.colors)
+// console.log(subInstance2.name)
+// console.log(subInstance2.colors)
+// subInstance1.showName();
+// subInstance2.showName();
+
+// 2 构造函数继承
+// subInstance1 = new SubType('Bob');
+// subInstance2 = new SubType('Jack')
+// console.log(subInstance1.name);
+// subInstance1.colors.push('yellow')
+// console.log(subInstance1.colors)
+// console.log(subInstance2.name)
+// console.log(subInstance2.colors)
+// subInstance1.showName();
+// subInstance2.showName();
+
+// 1 原型链继承
+// SubType.prototype = new SuperType();
+// const subInstance1 = new SubType();
+// console.log(subInstance1.name)
+// subInstance1.colors.push('yellow');
+// console.log(subInstance1.colors)
+// subInstance1.showName()
+// const subInstance2 = new SubType()
+// console.log(subInstance2.name)
+// console.log(subInstance2.colors)
+</script>
+</html>

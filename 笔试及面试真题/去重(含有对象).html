@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 1 网易
+    // 实现去重：[20, 'hello', {name: 'jack'}, {name: 'jack'}]
+    // 这是在之前用普通去重方法办不到的！原理：object的key唯一！写法上有filter和key两种
+
+    // 法一：filter
+    function uniq1(arr){
+      let hash = {};
+      return arr.filter((item) => {
+        return !hash[item] && (hash[item] = true);
+      })
+    }
+
+    // 法二：reduce
+    function uniq2(arr){
+      let hash = {};
+      return arr.reduce((pre, cur) => {
+        if(!hash[cur]){
+          hash[cur] = true;
+          pre.push(cur);
+        }
+        return pre;
+      }, [])
+    }
+    // const arr1 = [1,2,2,3,4,4,4];
+    // const arr2 = [20, 'hello', {name: 'jack'}, {name: 'jack'}]
+    // console.log(uniq2(arr2))
+
+    // 2 美团，给下面的arr去重（注意包含了一个字符串）
+    // 要问清楚面试官这个'1'是要当作和数字1重复需要去掉，还是要保留
+    let arr = [1,2, '1', 6, 6, 5]
+    // 先用普通去重看看结果
+    console.log([...new Set(arr)]); // [1, 2, "1", 6, 5]
+    // 普通去重会保留！因为是严格相等才去掉，所以面试官应该是要去掉的
+
+    // 解决方法其实和上面一样的，再写一遍
+    function uniq(arr){
+      let hash = {};
+      return arr.filter((item) => {
+        return !hash[item] && (hash[item] = true)
+      })
+    }
+    console.log(uniq(arr)); // [1, 2, 6, 5] 成功~
+  </script>
+</html>

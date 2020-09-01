@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>正则提炼数字</title>
+</head>
+<body>
+</body>
+<script>
+    function extractNums(str){
+      return str.replace(/\D+/g, '');  // 将字符串中所有的非数字部分用空字符串来代替
+    }
+    let s = "abc123ds45";
+    let result = extractNums(s) 
+    console.log(result);   // 12345（如果换为\d，则是替换掉了所有的数字部分，打印abcds）
+</script>
+</html>

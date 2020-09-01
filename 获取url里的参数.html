@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>获取url中的参数</title>
+</head>
+<body>
+</body>
+<script>
+    // 获取url中的参数如：www.baidu.com?a=1&b=2
+    const getQueryPara = url => {
+        // debugger;
+        var json = {};
+        var arr = url.substring(url.indexOf('?')+1).split('&');
+        arr.forEach(item => {
+            var pairs = item.split('=')
+            json[pairs[0]] = Number(pairs[1])
+        });
+        return json
+    }
+    console.log(getQueryPara('www.baidu.com?a=1&b=2'))
+</script>
+</html>

@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>call/apply/bind</title>
+</head>
+<body>
+</body>
+<script>
+var name = 'global';
+let person = {
+        name:'king',
+        greet:function(str = 'hello', str2 = 'Good morning'){
+                console.log(`${str},${this.name},${str2}`)
+        },
+        show1:function(){  // 普通函数
+          return this.name;
+        },
+        show2:()=>{return this.name}, // 箭头函数
+        show3:function(){
+          return ()=>{return this.name}
+        }
+}
+let person2 = {name:'sara'}
+// 原生call/apply/bind
+// person.greet() // hello,king
+// person.greet.call(person2,'hi') // hi,sara
+// person.greet.apply(person2,['hi']) // hi,sara
+// person.greet.bind(person2, 'haha')(); // haha,sara，说明可以在bind时就传入参数
+// person.greet.bind(person2)('hi') // hi,sara
+// let sayHello = person.greet.bind(person2)
+// sayHello(); // hello,sara
+
+// 测试用call绑定箭头函数时this的指向
+console.log(person.show1()); // king
+console.log(person.show2()); // global
+console.log(person.show3()()); // king
+console.log(person.show1.call(person2)); // sara
+console.log(person.show2.call(person2)); // global
+console.log(person.show3.call(person2)()) // sara
+
+// var testVal = 2;
+// test = () => {console.log(this.testVal)}
+// test() // 2
+// testObj = {
+//   testVal : 3
+// }
+// test.call(testObj) // 2
+
+
+Function.prototype.myCall = function(context, ...args){
+  // 传入的第一个参数context为null或undefined时，默认将this指向全局对象window
+  let thisArg = context || window;
+  // 给context对象添加方法/函数，此时this指向调用myCall函数的函数对象
+  // 本例中即为person.greet
+  thisArg.func = this
+  // 传递给函数的参数
+  args = args || []
+  // 调用func函数（即调用myCall的函数），将除了第一个参数之外的参数依次传递过去
+  const result = thisArg.func(...args)
+  // thisArg对象上本身并没有func属性，用完删除，释放空间
+  delete thisArg.func;
+  return result;
+}
+// 测试
+// person.greet.myCall(person2, 'hey') // hey,sara 与内置call一样，测试成功
+// test.myCall(testObj) // 2
+
+Function.prototype.myApply = function(context, arr){
+  let thisArg = context || window
+  thisArg.func = this
+  if(!arr){
+    // 第二个参数arr为null或undefined
+    result = thisArg.func()
+  }else{
+    if(! arr instanceof Array){
+      throw new Error("paras must be array!")
+    }else{
+      result = thisArg.func(...arr)
+    }
+  }
+  delete thisArg.func
+  return result
+}
+// 测试
+// person.greet.apply(person2, ['wow']) 与内置apply一样，测试成功
+
+
+// bind
+Function.prototype.myBind = function(context){
+  // debugger;
+  let self = this; // this即为调用bind的函数
+  let args = Array.prototype.slice.call(arguments, 1);
+
+  let tempFn = function(){}
+
+  let bindFn = function(){
+    // 这个时候的arguments是指bind返回的函数传入的参数
+    let secondArgs = Array.prototype.slice.call(arguments);
+    // 当作为构造函数时，this指向新建的实例对象，根据下面的bindFn.prototype = new tempFn()
+    // 可知，判断为true。将this指向实例。如果不作为构造函数，而是作为单独的函数调用，那么this
+    // 指向的是window，判定为false，用applyd将this指向指定的context.
+    self.apply(this instanceof tempFn ? this : context , args.concat(secondArgs));
+  }
+  // 修改返回函数的 prototype 为绑定函数的 prototype，实例就可以继承函数的原型中的属性
+  tempFn.prototype = self.prototype;
+  bindFn.prototype = new tempFn();
+  return bindFn;
+}
+
+// bind用作构造函数
+var value = 2;
+var foo = {
+    value: 1
+};
+function bar(name, age) {
+    this.habit = 'shopping';
+    console.log(this.value);
+    console.log(name);
+    console.log(age);
+}
+
+bar.prototype.friend = 'kevin';
+
+// var bindFoo = bar.bind(foo, 'daisy');
+var myBindFoo = bar.myBind(foo, 'daisy')
+var obj = new myBindFoo('18');
+console.log(obj.habit);
+console.log(obj.friend);
+
+// bind普通
+var foo1 = {
+    value: 1
+};
+var foo2 = {
+    value: 2
+};
+// function bar(name, age) {
+//     console.log(this.value);
+//     console.log(name);
+//     console.log(age);
+// }
+
+// var myBindFoo = bar.myBind(foo1).myBind(foo2)
+// myBindFoo('Jack',23)
+
+</script> 
+</html>

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    function quickSort(arr){
+      quick(arr, 0, arr.length - 1);
+    }
+
+    function quick(arr, lo, hi){
+      if(hi <= lo){
+        return;
+      }
+      let j = partition(arr, lo, hi);
+      quick(arr, lo, j - 1);
+      quick(arr, j+1, hi);
+    }
+
+    function partition(arr, lo ,hi){
+      // 这里搞反了！
+      let i = lo, j = hi+1;
+      let v = arr[lo];
+      while(true){
+        while(arr[++i] < v){
+          if(i == hi){
+            break;
+          }
+        }
+        while(v < arr[--j]){}
+        if(i >= j){
+          break;
+        }
+        swap(arr, i, j);
+      }
+      swap(arr, lo, j);
+      return j;
+    }
+
+    function swap(arr, i, j){
+      const temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    let arr = [2,1,33,4,7,6]
+    quickSort(arr)
+    console.log(arr)
+  </script>
+</html>

@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 防抖：实践在被触发n秒之后再执行回调函数，如果在这n秒之内又被触发，
+    // 则重新计时
+    // 写法一（较简单）
+    function debounce(fn, delay){
+      let timer = null;
+      return function(){
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          fn.apply(this, arguments);
+        }, delay)
+      }
+    }
+
+    // 测试：
+    function callback(e, content){
+      console.log(e, content);
+    }
+
+    let debounceFn = debounce(callback, 500) // 获得防抖函数
+    // document.onmousemove = function(e){
+    //   debounceFn(e, 'debounce');
+    // }
+
+    // 节流：事件在一个单位时间内只能触发一次，如果在这个时间内又被触发，
+    // 只有一次生效
+    function throttle(fn, delay){
+      let canRun = true; // 刚开始肯定是可以运行的
+      return function(){
+        if(!canRun){ 
+          return; // 前面还有一个在运行，直接返回
+        }
+        canRun = false; // 有个回调进来了，准备运行了，那么其他回调现在应该是不能进来的！
+        setTimeout(() => {
+          fn.apply(this, arguments);
+          canRun = true;
+        }, delay)
+      }
+    }
+    // 测试
+    function sayHi(name){
+      console.log("hello" + name)
+    }
+    let throttleFn = throttle(sayHi, 1000)
+    // document.addEventListener('mousemove', throttleFn)
+    document.addEventListener('mousemove', function(){
+      throttleFn('大黄')
+    })
+
+    // 写法二：
+    function throttle2(fn, delay){
+      var timer;
+      return function(){
+        var that = this;
+        var args = arguments;
+        if(timer){
+          return;
+        }
+        timer = setTimeout(function(){
+          fn.apply(that);
+          timer = null;
+        }, delay)
+      }
+    }
+  </script>
+</html>

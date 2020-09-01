@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 设计函数输出数组的重复元素
+    function findRepeat(arr){
+      return arr.filter((item,_,arr) => {
+        return arr.indexOf(item) !== arr.lastIndexOf(item);
+      })
+    }
+    const arr = [1,2,2,3,4,4,4];
+    console.log(findRepeat(arr))
+  </script>
+</html>

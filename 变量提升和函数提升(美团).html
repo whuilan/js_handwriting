@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+</body>
+<script>
+  // function foo(){
+  //   console.log(a)
+  //   var a = 1;
+  //   console.log(a)
+  //   function a(){ console.log("I'm function a") }
+  //   console.log(a)
+  //   a();
+  // }
+  // foo();
+
+  // 上面的fn函数在js眼中是这样解析的：
+  // function foo(){
+  //   var a; //声明一个变量a但没有定义它的值
+  //   function a(){ console.log("I'm function a")} // a现在被定义成了一个函数
+  //   console.log(a); // 此处打印a自然是刚刚定义的函数function a
+  //   a = 1; // 将a重新定义成1，原来的函数被覆盖
+  //   console.log(a); // a为新定义的数值1
+  //   console.log(a); // 同上
+  //   a(); // 由于a已经被重新定义成了数值1，就不是之前定义的function了，不能调用
+  // }
+  // foo();
+
+
+// var b = 1;
+// function b(){console.log("I'm function b")}
+// console.log(b) // 1
+// b() // 报错
+
+// 美团春招二面面试题
+function Foo() {
+    getName = function () { console.log(1); };
+    return this;
+}
+Foo.getName = function () { console.log(2); };
+Foo.prototype.getName = function () { console.log(3); };
+var getName = function () { console.log(4); };
+function getName() { console.log(5); }
+// 问：出以下输出结果
+Foo.getName();   
+getName();       
+Foo().getName();  
+getName(); 
+
+var getName;
+function Foo() {
+  getName = function () { console.log(1); };
+  return this;
+}
+function getName(){console.log(5)}
+Foo.getName = function () { console.log(2); };
+Foo.prototype.getName = function () { console.log(3); };
+getName = function () { console.log(4); };
+// 输出结果？
+Foo.getName(); 
+getName(); 
+Foo().getName(); 
+getName();
+
+// function foo() {
+//   console.log(a);
+//   var a = 1;
+//   console.log(a);
+//   function a() {}
+//   console.log(a);
+//   console.log(b);
+//   var b = 2;
+//   console.log(b);
+//   function b() {}
+//   console.log(b);
+// }
+// foo();
+
+// // 以上定义的foo()函数在js眼中是这样解析的：
+// function foo() {
+//   var a;
+//   var b;
+//   function a() {}
+//   function b() {}
+//   console.log(a); // a()
+//   a = 1;
+//   console.log(a); // 1
+//   console.log(a); // 1
+//   console.log(b); // b()
+//   b = 2;
+//   console.log(b); // 2
+//   console.log(b);// 2
+// }           
+</script>
+</html>

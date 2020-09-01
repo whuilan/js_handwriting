@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>test</title>
+</head>
+<body>
+</body>
+<script>
+  function getType(target){
+    // 用typeof可以判断出除了object类型以外的六种类型：
+    // number string boolean undefined function symbol
+    const basicType = typeof target;
+    if(basicType !== 'object'){
+      return basicType;
+    }
+    // 为空就直接返回null
+    if(target === null){
+      return 'null';
+    }
+    const types = {
+      '[object Array]': 'Array',
+      '[object Date]': 'Date',
+      '[object RegExp]': 'RegExp',
+      '[object Object]': 'Object'
+    }
+    const objType = Object.prototype.toString.call(target);
+    return types[objType];
+  }
+  let v = [1,2];
+  const typeOfV = getType(v);
+  console.log(typeOfV)
+</script>
+</html>

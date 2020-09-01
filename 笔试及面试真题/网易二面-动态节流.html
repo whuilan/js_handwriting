@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // 实现一个节流函数throttle(fn, waitFn)，其中第二个参数返回Promise，实现动态节流。
+    // 允许第二个函数末为resolve之前fn都处于节流状态。
+    // 一个调用示例为：
+    // throttle(() => console.log('hello'), () => new Promise(res => {
+    //   setTimeout(() => {
+    //     res();
+    //   },1000)
+    // }))
+    function throttle(fn, waitFn){
+      let canRun = false;
+      return function(){
+        if(!canRun){
+          waitFn().then(res => {
+           canRun = true;
+          })
+        }else{
+          fn(...arguments);
+        }        
+      }
+    }
+  </script>
+</html>

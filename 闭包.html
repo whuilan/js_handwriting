@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>closure_var</title>
+</head>
+<body>
+</body>
+<script>
+// 基本的闭包：保留函数定义时所在的词法作用域
+function foo(){
+  let a = 6;
+  return function(){
+    console.log(a);
+  }
+}
+// let fn = foo()
+// fn();
+
+// 用闭包模拟块级作用域（私有作用域），最典型的例子是：
+// 非闭包：
+function outputNums(count){
+  for(var i = 0; i < count; i++){
+    console.log(i);
+  }
+  console.log(i); // 可以访问到循环变量i！
+}
+// outputNums(3); // 打印出0,1,2,3！
+
+// 使用闭包来实现在循环外部不能使用变量i：
+function outputCount(count){
+  (function(){
+    for(var i = 0; i < count; i++){
+      console.log(i)
+    }
+  })();
+  console.log(i);
+}
+// outputCount(3);
+
+// 用闭包使得var实现let的功能
+for(var i = 0; i < 3; i++){
+  (function(j){
+    setTimeout(function(){
+      console.log(j)
+    }, 1000)
+  })(i)
+}
+</script>
+</html>

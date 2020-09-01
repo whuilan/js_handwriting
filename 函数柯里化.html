@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    function add2(a, b){
+      return a + b;
+    }
+
+    function add3(a, b, c){
+      return a + b + c;
+    }
+
+    // 美团面试题 fn(1)(2)(3)写 函数科里化，最直接的方法：闭包
+    fn = function(a){
+      return function(b){
+        return function(c){
+          return a + b + c;
+        }
+      }
+    }
+    // console.log(fn(1)(2)(3));
+
+    const curry = (fn, ...args) => 
+      args.length < fn.length
+      ? (...newArgs)  => curry(fn, ...args, ...newArgs)
+      : fn(...args);
+    
+   let curryAdd = curry(add3);
+   console.log(curryAdd(1, 2)(3));
+   console.log(curryAdd(1)(2,3));
+   console.log(curryAdd(1,2,3));
+  </script>
+</html>

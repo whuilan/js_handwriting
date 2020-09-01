@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+    <button id="toggle">提交</button>
+    <a href="https://null.jsbin.com/runner#123">跳转</a>
+  </body>
+  <script>
+    var $el = document.getElementById('toggle')
+    $el.addEventListener('click', (e) => {
+      e.preventDefault()
+      location.hash = '#' + Math.floor(Math.random() * 1000000)
+    })
+
+    window.addEventListener('hashchange', (e) => {
+      const { oldURL, newURL } = e
+      console.log(oldURL, newURL)
+    })
+  </script>
+</html>
