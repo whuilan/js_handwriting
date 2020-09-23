@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // Promise基础实现：链式调用+保存状态
+    class MyPromise{
+      constructor(fn){
+        this.callbacks = [];
+        this.state = 'pending'; // 记录异步操作的状态（进行中or已完成or失败）
+        this.value = null; // 保存异步操作的结果
+        fn(this.resolve.bind(this))
+      }
+
+      then(onFulfilled){
+        return new MyPromise(resolve => {
+          this.handle({
+            onFulfilled: onFulfilled || null, // null不要忘了！
+            resolve: resolve
+          })
+        })
+      }
+      // 注意回调callback包括两个函数！一个是我们给then()传入的希望在异步操作成功时执行的函数，
+      // 一个是then()返回的promise实例的resolve()！因为这样才能把前后promise连起来，才能在当前
+      // 的then()后面接着调用then()，并且将当前回调的结果作为参数传入！不然后面的then注册的回调函数得不到执行
+      handle(callback){
+        if(this.state === 'pending'){
+          this.callbacks.push(callback);
+          return;
+        }
+        // Promise/A+允许不给then传递任何东西，即then的参数为空
+        if(!callback.onFulfilled){
+          callback.resolve(this.value);
+          return; // 掉了！
+        }
+        let res = callback.onFulfilled(this.value);
+        callback.resolve(res); // 关键！
+      }
+
+      resolve(value){
+        // 判断value是否为promise，如果是promise，当前 Promise 实例的状态要依赖 resolve 的值的 Promise 实例的状态。
+        if(value && (typeof value === 'object' || typeof value === 'function')){
+          let then = value.then;
+          if(typeof then === 'function'){
+            then.call(value, this.resolve.bind(this));
+            return;
+          }
+        }
+
+        this.state = 'fulfilled'; // 更新状态
+        this.value = value; // 保存结果
+        this.callbacks.forEach(callback=>this.handle(callback))
+      }
+    }
+
+    new MyPromise(resolve => {
+      setTimeout(function(){
+        resolve("测试promise")
+      }, 3000)
+    }).then(res => {
+      console.log(res)
+    })
+
+  </script>
+</html>

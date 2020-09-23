@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+  </head>
+  <body>
+  </body>
+  <script>
+    // Promise原型方法实现：
+    class MyPromise{
+      constructor(fn){
+        this.callbacks = [];
+        this.state = 'pending'; // 记录异步操作的状态（进行中or已完成or失败）
+        this.value = null; // 保存异步操作的结果
+        fn(this.resolve.bind(this), this.reject.bind(this))
+      }
+
+      then(onFulfilled, onRejected){
+        return new MyPromise((resolve, reject) => {
+          this.handle({
+            onFulfilled: onFulfilled || null,
+            onRejected: onRejected || null,
+            resolve: resolve,
+            reject: reject
+          })
+        })
+      }
+
+      // catch：不管是错误也好，异常也罢，最终都是通过reject实现的，可见最终对于错误以
+      // 及异常的处理，都可以通过then 中的 onRejected 来处理。所以单独增加一个catch方法，
+      // 它是.then(null, onRejected) 的别名
+      catch(onError){
+        return this.then(null, onError);
+      }
+      
+      // finally：不管Promise最后的状态如何，都要执行某些操作(onDone)。实在不想看了
+      // 直接copy到这里吧...其实最简单的实现就是
+      // finally(onDone){return this.then(onDone, onDone)}
+      finally(onDone) {
+        if (typeof onDone !== 'function') return this.then();
+        let Promise = this.constructor;
+        return this.then(
+          value => Promise.resolve(onDone()).then(() => value),
+          reason => Promise.resolve(onDone()).then(() => { throw reason })
+        );
+      }
+      
+      handle(callback){
+        if(this.state === 'pending'){
+          this.callbacks.push(callback);
+          return;
+        }
+
+        let cb = this.state === 'fulfilled' ? callback.onFulfilled : callback.onRejected;
+        
+        if(!cb){
+          cb = this.state === 'fulfilled' ? callback.resolve : callback.reject;
+          cb(this.value);
+          return;
+        }
+
+        let res;
+        // 异常捕获：错误处理是指在 Promise 的构造函数中发现的错误，并通过 reject 通知的。
+        // 如果在执行onFulfilled或者 onRejected 时，出现了异常，该如何处理呢？对于这类异常，
+        // 处理也很简单，可以使用try-catch捕获错误，然后将相应的Promise状态设置为rejected状态
+        try{
+          res = cb(this.value);
+          cb = this.state === 'fulfilled' ? callback.resolve : callback.reject;
+        }catch(error){
+          res = error;
+          cb = callback.reject;
+        }finally{
+          cb(res);
+        }        
+      }
+      
+      resolve(value){
+        // 判断value是否为promise，如果是promise，当前 Promise 实例的状态要依赖 resolve 的值的 Promise 实例的状态。
+        if(value && (typeof value === 'object' || typeof value === 'function')){
+          let then = value.then;
+          if(typeof then === 'function'){
+            then.call(value, this.resolve.bind(this), this.reject.bind(this));
+            return;
+          }
+        }
+
+        this.state = 'fulfilled'; // 更新状态
+        this.value = value; // 保存结果
+        this.callbacks.forEach(callback=>this.handle(callback))
+      }
+
+      // 错误处理：Promise 的构造函数中发现错误，要标记 Promise 的状态为 rejected， 
+      // 并执行注册的 onRejected
+      reject(error){
+        this.state = 'rejected';
+        this.value = error;
+        this.callbacks.forEach(callback => this.handle(callback))
+      }
+    }
+  </script>
+</html>
